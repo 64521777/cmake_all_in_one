@@ -1,0 +1,46 @@
+#ifndef _ENVIROMENT_CONFIG_Detect_H__
+#define _ENVIROMENT_CONFIG_Detect_H__
+
+/**
+    全局的编译宏，检查第三方库是否存在，用于控制各个功能模块的代码是否编译
+	编译环境配置项: 编译系统可用的第三方库
+*/
+
+#define TRUE 1
+#define FALSE 0
+
+// 第三库的检查宏
+#define WITH_ET199 	${ET199_FOUND}	// 坚石诚信 ET199 加密狗 API
+#define WITH_BOOST	${Boost_FOUND}		// Boost C++
+#define WITH_OPENCV	${OpenCV_FOUND}		// OpenCV
+#define WITH_FREEIMAGE	${FreeImage_FOUND}	// FreeImage
+#define WITH_FFMPEG	${FFMPEG_FOUND}		// FFMPEG
+#define WITH_GLOG	${Glog_FOUND}		// glog
+#define WITH_GFLAGS	${GFlags_FOUND}		// gflags
+#define WITH_PROTOBUF	${Protobuf_FOUND}	// protobuf
+// windows 版本的 leveldb, lmdb 静态链接了 boost, 如果同时链接静态版本的 leveldb/lmdb
+// 和动态库版本的 boost 库创建 dll 时会提示符号重定义
+//#if ! defined(_MSC_VER)
+#define WITH_LEVELDB	${LevelDB_FOUND}	// leveldb
+#define WITH_LMDB	${LMDB_FOUND}		// lmdb
+//#endif
+#define WITH_TESSERACT	${Tesseract_FOUND}	// google tesseract OCR
+
+#define WITH_CRYPTOPP	${CryptoPP_FOUND}	// Crypto++	加密解密
+#define WITH_LIBCCV	${CCV_FOUND}		// For Text Detection
+#define WITH_CAFFE	${Caffe_FOUND}		// 色情识别，图像分类等
+#define WITH_DLIB	${dlib_FOUND}		// 用于开源人脸识别和人脸定位
+#define WITH_ZMQ    ${CZeroMQ_FOUND}    // ZeroMQ
+#define WITH_MYSQL_CONNECTOR    ${MySQLCPPCon_FOUND}    // MySQL
+
+#define WITH_SENSETIME_FACESDK	${SenseTimeFaceSDK_FOUND}	// Face Recognition SDK	
+
+#define WITH_OPENVINO	${OpenVINO_FOUND}	// OpenVINO Inference Engine
+#define WITH_TENSORRT	${TensorRT_FOUND}	// Nvidia TensorRT
+
+
+// 编译控制宏：options 参数
+#define TARGET ${TARGET}    // 设备
+
+
+#endif

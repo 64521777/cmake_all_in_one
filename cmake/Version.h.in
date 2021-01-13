@@ -1,0 +1,105 @@
+///
+/// @brief   Report the version for this package.
+///
+
+#ifndef @META_PROJECT_ID@_VERSION_H_
+#define @META_PROJECT_ID@_VERSION_H_
+
+#include <string>
+#include <sstream>
+
+/// project and author info
+#define @META_PROJECT_ID@_PROJECT_NAME        "@META_PROJECT_NAME@"
+#define @META_PROJECT_ID@_PROJECT_DESCRIPTION "@META_PROJECT_DESCRIPTION@"
+
+#define @META_PROJECT_ID@_AUTHOR_ORGANIZATION "@META_AUTHOR_ORGANIZATION@"
+#define @META_PROJECT_ID@_AUTHOR_DOMAIN       "@META_AUTHOR_DOMAIN@"
+#define @META_PROJECT_ID@_AUTHOR_MAINTAINER   "@META_AUTHOR_MAINTAINER@"
+
+/// The current major version.
+#define @META_PROJECT_ID@_VERSION_MAJOR       "@META_VERSION_MAJOR@"
+/// The current minor version.
+#define @META_PROJECT_ID@_VERSION_MINOR       "@META_VERSION_MINOR@"
+/// The current patch level.
+#define @META_PROJECT_ID@_VERSION_PATCH       "@META_VERSION_PATCH@"
+
+/// The current svn/git revision.
+#define @META_PROJECT_ID@_VERSION_REVISION    "@META_VERSION_REVISION@"
+
+/// The current project version.
+#define @META_PROJECT_ID@_VERSION             "@META_VERSION@"
+/// The current project all version info.
+#define @META_PROJECT_ID@_NAME_VERSION        "@META_NAME_VERSION@"
+
+
+/// True if the current version is newer than the given one.
+#define @META_PROJECT_ID@_VERSION_GT(MAJOR, MINOR, PATCH) \
+  ((@META_PROJECT_ID@_VERSION_MAJOR > MAJOR) ||           \
+   (@META_PROJECT_ID@_VERSION_MAJOR ==                    \
+    MAJOR&&(@META_PROJECT_ID@_VERSION_MINOR > MINOR || (@META_PROJECT_ID@_VERSION_MINOR == MINOR&& @META_PROJECT_ID@_VERSION_PATCH > PATCH))))
+
+/// True if the current version is equal or newer to the given.
+#define @META_PROJECT_ID@_VERSION_GE(MAJOR, MINOR, PATCH) \
+  ((@META_PROJECT_ID@_VERSION_MAJOR > MAJOR) ||           \
+   (@META_PROJECT_ID@_VERSION_MAJOR ==                    \
+    MAJOR&&(@META_PROJECT_ID@_VERSION_MINOR > MINOR || (@META_PROJECT_ID@_VERSION_MINOR == MINOR&& @META_PROJECT_ID@_VERSION_PATCH >= PATCH))))
+
+/// True if the current version is older than the given one.
+#define @META_PROJECT_ID@_VERSION_LT(MAJOR, MINOR, PATCH) \
+  ((@META_PROJECT_ID@_VERSION_MAJOR < MAJOR) ||           \
+   (@META_PROJECT_ID@_VERSION_MAJOR ==                    \
+    MAJOR&&(@META_PROJECT_ID@_VERSION_MINOR < MINOR || (@META_PROJECT_ID@_VERSION_MINOR == MINOR&& @META_PROJECT_ID@_VERSION_PATCH < PATCH))))
+
+/// True if the current version is older or equal to the given.
+#define @META_PROJECT_ID@_VERSION_LE(MAJOR, MINOR, PATCH) \
+  ((@META_PROJECT_ID@_VERSION_MAJOR < MAJOR) ||           \
+   (@META_PROJECT_ID@_VERSION_MAJOR ==                    \
+    MAJOR&&(@META_PROJECT_ID@_VERSION_MINOR < MINOR || (@META_PROJECT_ID@_VERSION_MINOR == MINOR&& @META_PROJECT_ID@_VERSION_PATCH <= PATCH))))
+
+/// Information about the current Project version.
+class @META_PROJECT_ID@Version {
+public:
+    /// @return the current major version of Project.
+    static int getMajor()
+    {
+        return @META_PROJECT_ID@_VERSION_MAJOR;
+    }
+
+    /// @return the current minor version of Project.
+    static int getMinor()
+    {
+        return @META_PROJECT_ID@_VERSION_MINOR;
+    }
+
+    /// @return the current patch level of Project.
+    static int getPatch()
+    {
+        return @META_PROJECT_ID@_VERSION_PATCH;
+    }
+
+    /// @return the current Project version (MM.mm.pp).
+    static std::string getString()
+    {
+        std::ostringstream version;
+        version << @META_PROJECT_ID@_VERSION_MAJOR << '.' << @META_PROJECT_ID@_VERSION_MINOR << '.' << @META_PROJECT_ID@_VERSION_PATCH;
+        return version.str();
+    }
+
+    /// @return the SVN revision.
+    static std::string getRevision()
+    {
+        return @META_PROJECT_ID@_VERSION_REVISION;
+    }
+
+    /// @return the current ProjB version plus the SVN revision (MM.mm.pp.rev).
+    static std::string getRevString()
+    {
+        std::ostringstream version;
+        version << getString() << '.' << @META_PROJECT_ID@_VERSION_REVISION;
+        return version.str();
+    }
+};
+
+
+#endif  // @META_PROJECT_ID@_VERSION_H_
+
