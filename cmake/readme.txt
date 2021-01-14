@@ -45,13 +45,17 @@ modules
 
 代码块
 
-CMake>=3.0的时候支持多行注释，以#[[开始进行块注释，并且在块注释的一端与]]结束。
+1. CMake>=3.0的时候支持多行注释，以#[[开始进行块注释，并且在块注释的一端与]]结束。
 
+2.  Enable package managers, add after project command
+include(package/Conan.cmake)
+include(package/Vcpkg.cmake)
+
+3. 检查当前项目是否是顶层项目
 # only activate tools for top level project
 if(NOT PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   return()
 endif()
-
 
 # Make sure we tell the topdir CMakeLists that we exist (if build from topdir)
 get_directory_property(hasParent PARENT_DIRECTORY)
@@ -60,12 +64,30 @@ if(hasParent)
 endif()
 
 
-# Set the compiler standard
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+# Set the compiler standard for the target
+add_executable(target ${sources})
+target_compile_features(target PUBLIC cxx_std_17)
 
 # Setup code coverage if enabled
 if (${CMAKE_PROJECT_NAME}_ENABLE_CODE_COVERAGE)
   target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC -O0 -g -fprofile-arcs -ftest-coverage)
   target_link_options(${CMAKE_PROJECT_NAME} PUBLIC -fprofile-arcs -ftest-coverage)
   verbose_message("Code coverage is enabled and provided with GCC.")
+endif()
+
+
+# Find all headers and implementation files
+include(cmake/SourcesAndHeaders.cmake)
+
+if(${PROJECT_NAME}_BUILD_EXECUTABLE)
+  add_executable(${PROJECT_NAME} ${exe_sources})
+  add_library(${PROJECT_NAME}_LIB ${headers} ${sources})
+elseif(${PROJECT_NAME}_BUILD_HEADERS_ONLY)
+  add_library(${PROJECT_NAME} INTERFACE)
+else()
+  add_library(
+    ${PROJECT_NAME}
+    ${headers}
+    ${sources}
+  )
 endif()

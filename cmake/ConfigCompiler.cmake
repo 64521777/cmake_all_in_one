@@ -3,7 +3,7 @@
     编译器配置
 ]]
 
-# ---[complier options
+# ---[complier options for picasso
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g")

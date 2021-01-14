@@ -13,11 +13,14 @@ include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
-  VERSION ${VERSION}
-  COMPATIBILITY AnyNewerVersion
+  VERSION 
+    ${VERSION}
+  COMPATIBILITY 
+    AnyNewerVersion
 )
 
-configure_file(cmake/${PROJECT_NAME}Config.cmake
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake"
   COPYONLY
 )
@@ -39,6 +42,7 @@ install(
   FILES
     cmake/${PROJECT_NAME}Config.cmake
     "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
-  DESTINATION ${config_install_dir}
+  DESTINATION 
+    ${config_install_dir}
   COMPONENT devel
 )

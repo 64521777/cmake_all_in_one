@@ -31,7 +31,28 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
+# Create version file
+file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
+# Produce the final Version.h using template Version.h.in and substituting variables.
+# We don't want to polute our source tree with it, thus putting it in binary tree.
+configure_file(
+    "${CMAKE_CURRENT_LIST_DIR}/Version.h.in" 
+    "${CMAKE_CURRENT_BINARY_DIR}/Version.h" 
+    @ONLY)
+
+
+#[[
+# [可选] 安装命令
+install(
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME_LOWERCASE}/version.hpp
+  DESTINATION
+    include/${PROJECT_NAME_LOWERCASE}
+)
+]]
+
+# picasso used version definition
 #SET(Major 2 CACHE STRING "major version")
 #SET(Minor 0 CACHE STRING "minor version")
 #SET(Patch 01 CACHE STRING "patch version")
@@ -40,6 +61,3 @@ string(TIMESTAMP Build "%y%m%d")
 set(SDK_VER_NO "${Major}.${Minor}.${Patch}.${Build}" CACHE STRING "code logical version")
 add_definitions(-DSDK_VER_NO="${SDK_VER_NO}")
 
-# Produce the final Version.h using template Version.h.in and substituting variables.
-# We don't want to polute our source tree with it, thus putting it in binary tree.
-configure_file("${CMAKE_CURRENT_LIST_DIR}/Version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/Version.h" @ONLY)

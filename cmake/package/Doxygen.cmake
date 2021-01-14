@@ -10,6 +10,8 @@
   Step 3: Documenting the sources
 ]]
 
+# -- from https://github.com/Barthelemy/CppProjectTemplate cmake/DoxygenTarget.cmake --
+# make doc target from doc dir's CMakeLists.txt
 function(PrepareDocTarget)
 
   # Configure the doxygen config file with current settings:
@@ -35,15 +37,3 @@ function(PrepareDocTarget)
 
 endfunction()
 
-
-if(${PROJECT_NAME}_ENABLE_DOXYGEN)
-    set(DOXYGEN_CALLER_GRAPH YES)
-    set(DOXYGEN_CALL_GRAPH YES)
-    set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs)
-
-    find_package(Doxygen REQUIRED dot)
-    doxygen_add_docs(doxygen-docs ${PROJECT_SOURCE_DIR})
-
-    verbose_message("Doxygen has been setup and documentation is now available.")
-endif()

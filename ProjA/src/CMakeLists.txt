@@ -36,6 +36,10 @@ add_executable(${APPLICATION_NAME} ${APP_SOURCES})
 # Links the target exe (projArunner) against the library (libprojA) and other required libraries
 target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
+# Set the project standard and warnings
+include(compiler/CompilerWarnings)
+set_target_warnings(${APPLICATION_NAME})
+
 # Says how and where to install software
 # Targets:
 #   * <prefix>/lib/<libraries>

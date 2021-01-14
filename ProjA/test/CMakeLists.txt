@@ -39,7 +39,8 @@ file(GLOB_RECURSE TEST_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cxx)
 set(ALL_TESTS)
 
 foreach(FILE ${TEST_FILES})
-    string(REGEX REPLACE "[./]" "_" NAME ${FILE}) # create exe name
+    # create exe name and target
+    string(REGEX REPLACE "[./]" "_" NAME ${FILE}) 
     add_executable(${NAME} ${FILE})
 
     # link against our lib and gtest
@@ -49,6 +50,16 @@ foreach(FILE ${TEST_FILES})
             ProjA 
             ${TEST_LIBS}
     ) 
+
+    # [可选] Set the compiler standard
+    # target_compile_features(${NAME} PUBLIC cxx_std_17)
+
+    # Setup code coverage if enabled
+    if (${CMAKE_PROJECT_NAME}_ENABLE_CODE_COVERAGE)
+        target_compile_options(${NAME} PUBLIC -O0 -g -fprofile-arcs -ftest-coverage)
+        target_link_options(${NAME} PUBLIC -fprofile-arcs -ftest-coverage)
+        verbose_message("Code coverage is enabled and provided with GCC.")
+    endif()
 
     # Add the unit tests to CMake
     add_test(
