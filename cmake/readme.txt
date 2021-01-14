@@ -45,9 +45,18 @@ modules
 
 代码块
 
+CMake>=3.0的时候支持多行注释，以#[[开始进行块注释，并且在块注释的一端与]]结束。
+
 # only activate tools for top level project
 if(NOT PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   return()
+endif()
+
+
+# Make sure we tell the topdir CMakeLists that we exist (if build from topdir)
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(hasParent)
+    set(PROJECT_${PROJECT_NAME} true PARENT_SCOPE)
 endif()
 
 

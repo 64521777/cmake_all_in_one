@@ -23,7 +23,6 @@ set(InferenceEngine_DIR ${INTEL_OPENVINO_DIR}/deployment_tools/inference_engine/
 
 
 if(DEFINED ENV{NGRAPH_ROOT})
-	find_package(dlib)
 	set(ngraph_DIR $ENV{VCPKG_ROOT}/cmake)
 	set(NGRAPH_INCLUDE_DIRS $ENV{VCPKG_ROOT}/include)
 else()

@@ -1,7 +1,7 @@
 # @author  Barthélémy von Haller
 
 include(FindDoxygen)
-include(DoxygenTarget)
+include(package/Doxygen)
 
 # Add an option for the user to enable or not the documentation generation every time we compile.
 # Either set it on the command line or use ccmake. It is an advanced option.

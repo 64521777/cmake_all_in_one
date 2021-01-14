@@ -95,10 +95,13 @@ function(get_git_modified ROOT_CODE_DIR VAR)
             WORKING_DIRECTORY                   # 执行路径
                 ${ROOT_CODE_DIR}
         )
-        # 替换多余的换行和M 字符，只保留 ; 分隔的修改的文件列表
-        string(REGEX REPLACE "([ \n]+)" ";" GIT_MODIFIED ${GIT_MODIFIED})
-        string(REPLACE "M;" ";" GIT_MODIFIED "${GIT_MODIFIED}")
-		#string(MAKE_C_IDENTIFIER ${GIT_MODIFIED} GIT_MODIFIED)
+	# 干净的代码 GIT_MODIFIED 内容为空, 无需处理
+        if(GIT_MODIFIED)
+            # 替换多余的换行和M 字符，只保留 ; 分隔的修改的文件列表
+            string(REGEX REPLACE "([ \n]+)" ";" GIT_MODIFIED ${GIT_MODIFIED})
+            string(REPLACE "M;" ";" GIT_MODIFIED "${GIT_MODIFIED}")
+            #string(MAKE_C_IDENTIFIER ${GIT_MODIFIED} GIT_MODIFIED)
+        endif()
     endif()
     set (${VAR} ${GIT_MODIFIED} PARENT_SCOPE)
 endfunction()

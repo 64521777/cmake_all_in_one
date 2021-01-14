@@ -1,3 +1,6 @@
+#[[
+    定义了一些常用的函数和宏
+]]
 
 #
 # set variable to value if variable is not defined
@@ -75,25 +78,6 @@ function(add_dependent_subproject subproject_name)
     endif ()
 endfunction(add_dependent_subproject)
 
-# Make sure we tell the topdir CMakeLists that we exist (if build from topdir)
-get_directory_property(hasParent PARENT_DIRECTORY)
-if(hasParent)
-    set(PROJECT_${PROJECT_NAME} true PARENT_SCOPE)
-endif()
-
-
-#
-# Set policy if policy is available
-#
-
-function(set_policy POL VAL)
-
-    if(POLICY ${POL})
-        cmake_policy(SET ${POL} ${VAL})
-    endif()
-
-endfunction(set_policy)
-
 #
 # Add a target for formating the project using `clang-format` (i.e: cmake --build build --target clang-format)
 #
@@ -120,4 +104,26 @@ function(add_clang_format_target)
 
 			message(STATUS "Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format).\n")
     endif()
+endfunction()
+
+
+#
+# show current cmake variables
+#
+
+function(show_cmake_variables)
+    # information of top project
+    message(STATUS "CMAKE_PROJECT_NAME: ${CMAKE_PROJECT_NAME}")
+    message(STATUS "CMAKE_PROJECT_VERSION: ${CMAKE_PROJECT_VERSION}")
+    message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+    message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
+    message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    message(STATUS "CMAKE_ARCHIVE_OUTPUT_DIRECTORY: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+    message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    # information of current porject
+    message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
+    message(STATUS "PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+    message(STATUS "PROJECT_BINARY_DIR: ${PROJECT_BINARY_DIR}")
+    # information of current file
+    message(STATUS "CMAKE_CURRENT_LIST_FILE: ${CMAKE_CURRENT_LIST_FILE}")
 endfunction()

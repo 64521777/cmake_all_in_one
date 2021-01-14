@@ -1,7 +1,6 @@
 # @author  Barthélémy von Haller
 
 #[[
-    CMake>=3.0的时候支持多行注释，以#[[开始进行块注释，并且在块注释的一端与]]结束。
     应该从顶级的CMakeLists.txt调用enable_testing. 将include(CTest)添加到您的顶级CMakeLists.txt.
 
     enable_testing()
@@ -14,6 +13,7 @@ verbose_message("Adding tests under ${CMAKE_PROJECT_NAME}Tests...")
 # Load the desired unit testing framework
 # Currently supported: GoogleTest (and GoogleMock), Catch2.
 #
+set(${CMAKE_PROJECT_NAME}_USE_GTEST 1)
 if(${CMAKE_PROJECT_NAME}_USE_GTEST)
     find_package(GTest REQUIRED)
 

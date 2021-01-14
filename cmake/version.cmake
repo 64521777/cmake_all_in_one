@@ -2,6 +2,10 @@
 # Project description and (meta) information
 # 
 
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/Version.h")
+return()
+endif()
+
 # Get git revision
 
 include(code_version/get_code_version)
