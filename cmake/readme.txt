@@ -63,7 +63,7 @@ if(hasParent)
     set(PROJECT_${PROJECT_NAME} true PARENT_SCOPE)
 endif()
 
-
+4. target 属性设置, c++标准 
 # Set the compiler standard for the target
 add_executable(target ${sources})
 target_compile_features(target PUBLIC cxx_std_17)
@@ -91,3 +91,22 @@ else()
     ${sources}
   )
 endif()
+
+
+# 
+# Deployment (global project files)
+# 
+
+# Install version file
+install(FILES "${PROJECT_BINARY_DIR}/VERSION" DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+
+# Install cmake find script for the project
+install(FILES ${META_PROJECT_NAME}-config.cmake DESTINATION ${INSTALL_ROOT} COMPONENT dev)
+
+# Install the project meta files
+install(FILES AUTHORS   DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+install(FILES LICENSE   DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+
+# Install runtime data
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)

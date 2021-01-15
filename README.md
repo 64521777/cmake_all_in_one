@@ -1,4 +1,138 @@
-[![Build Status](https://travis-ci.org/Barthelemy/CppProjectTemplate.svg?branch=master)](https://travis-ci.org/Barthelemy/CppProjectTemplate)
+GIT、CMAKE高效管理C++跨平台项目 ( https://www.jianshu.com/p/036a16a50e54?from=singlemessage )
+  build     [编译目录]
+  install   [部署目录]
+  ----bin   [.exe、.dll、.so等]
+  ----lib   [.lib、.a等]
+  ----include [c++接口文件目录]
+  doc       [项目文档目录]
+  gtest     [项目测试目录]
+  server    [项目名称]
+  ----CMake [cmake plugin插件目录]
+  ----CMakeLists.txt
+  ----core  [依赖自己的库]
+  ----log   [即将实现的库]
+  --------CMakeLists.txt
+  --------dependencies
+  ------------thirdpj [依赖别人的不开源库目录]
+  ----------------include
+  ----------------lib
+  --------external
+  ------------jsoncpp [依赖别人的开源库目录]
+  --------inc
+  ------------private [功能文件h目录]
+  ----------------stdafx.h   [预编译文件]
+  ------------public  [接口文件h目录]
+  ----------------log_public.h [接口文件]
+  --------src         [实现文件cpp目录]
+
+SERVER项目CMAKE
+  #cmake要求最低版本
+  cmake_minimum_required(VERSION 3.15.0)
+
+  #建立项目
+  project(server)
+
+  #设置项目版本
+  SET(SOVERSION 1)
+  SET(VERSION 1.0.0)
+
+  #设置项目依赖的cmake插件
+  #cotire插件用于做c++预编译处理
+  set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+  include(cotire)
+
+  #声明core库开关
+  option(BUILD_CORE "Build core" ON)
+  #声明core库编译成静态库或者动态库开关
+  option(BUILD_CORE_STATIC "Build core static libraries" OFF)
+  #声明log库开关
+  option(BUILD_LOG "Build log" ON)
+  #声明log库编译成静态库或者动态库开关
+  option(BUILD_LOG_STATIC "Build log static libraries" OFF)
+
+  #根据开关添加库
+  if (BUILD_CORE)
+      add_subdirectory(core)
+  endif ()
+
+  if (BUILD_LOG)
+      add_subdirectory(log)
+  endif ()
+
+LOG库CMAKE
+
+  #设置[实现文件cpp目录]
+  file(GLOB SOURCES src/*.cpp)
+
+  #根据项目声明开关设置生成静态库或者动态库
+  if (BUILD_LOG_STATIC)
+      add_library(log STATIC ${SOURCES})
+  else ()
+      add_library(log SHARED ${SOURCES})
+  endif ()
+
+  #add_definitions设置编辑编译FLAG，/D或-D 
+  #如果是windows开发者，应该比较熟悉，就是配置__declspec(dllexport)和__declspec(dllimport)
+  #如果是linux或其它平台均是空
+  add_definitions(-DLOG_API=__DLL_EXPORT)
+  add_definitions(-DCORE_API=__DLL_IMPORT)
+
+ #设置不同平台编译参数
+ if (WIN32)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -std=c++11 /W4 /Od /DDEBUG /MDd")
+    set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -std=c++11 /W4 /O2 /DNDEBUG /MD")
+ else ()
+    set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -std=c++11 -O0 -W -Wall -g -ggdb")
+    set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -std=c++11 -rdynamic -O2 -W -Wall -DNDEBUG")
+    target_link_libraries(log pthread)
+ endif ()
+
+  #设置[依赖别人的开源库目录]
+  #注意:这个目录是git submodule来管理的
+  add_subdirectory(external/jsoncpp)
+
+  #设置[依赖自己的库]
+  add_dependencies(log core)
+
+  #设置链接的依赖库
+  target_link_libraries(log core jsoncpp_lib)
+
+  #target_link_directories用来设置[依赖别人的不开源库目录]，本项目没有只做展示
+  #target_link_directories(log PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/thirdpj/lib")
+
+  #设置头文件引用，注意private引用和public引用
+  #public引用就是目录里的头文件都是库接口文件
+  target_include_directories(log 
+      PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/inc/private" #[功能文件h目录]，注意是private引用
+    "${CMAKE_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/thirdpj/include" #[依赖别人的不开源库目录]，注意是private引用
+      PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/inc/public" #[接口文件h目录]，注意是public引用
+  )
+
+  #设置LOG库预编译头文件stdafx.h
+  set_target_properties(log PROPERTIES
+      SOVERSION ${SOVERSION}
+      VERSION ${VERSION}
+      COTIRE_CXX_PREFIX_HEADER_INIT "${CMAKE_CURRENT_SOURCE_DIR}/inc/private/stdafx.h"
+  )
+  cotire(log)
+
+  #将LOG部署成第三方给别人使用
+  #即设置[.exe、.dll、.so等]和[.lib、.a等]
+  install(TARGETS log
+      ARCHIVE DESTINATION lib/log
+      LIBRARY DESTINATION lib/log
+      RUNTIME DESTINATION bin
+      COMPONENT library
+  )
+
+  #设置引用头文件[c++接口文件目录]
+  file(GLOB INCLUDES inc/public/*.h inc/public/*.config)
+  install(FILES ${INCLUDES} DESTINATION include/log)
+  
+
 
 This C++ project demonstrates the usage of CMake, boost's test, boost's option parsing and
 Doxygen. It is not the simplest example ever because we want to show how to use them

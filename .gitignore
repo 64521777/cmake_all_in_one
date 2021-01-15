@@ -1,0 +1,73 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# temp file
+*.[oa]
+*~
+
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+*.pb.h
+*.pb.cc
+*.zip
+*.rar
+dist
+build
+build_x64
+*EnviromentConfig.h
+
+*.jpg
+Code/Base
+Code/DevelopLib/VFPSDK/source/libCDVS
+Code/CommonLib/source/util/buildConfig.h
+Code/CommonLib/source/util/EnviromentConfig.h
+Code/CommonLib/test/test_data
+
+# Local Config:
+Debug
+Release
+Backup
+
+# other file
+*.pb.h
+*.pb.cc
+Code/DevelopLib/Common/AutoGen/*
+*/test_data/*

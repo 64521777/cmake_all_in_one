@@ -42,11 +42,6 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     )
 endif()
 
-#[[
-# --- Enable package managers ---
-include(package/Conan.cmake)
-include(package/Vcpkg.cmake)
-]]
 
 # --- Include options to get user config
 #include(options)
